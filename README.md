@@ -32,5 +32,5 @@ Dijkstra's Algorithm is a classic algorithm for finding the shortest path betwee
 
 ### A* (A-star) Algorithm
 
-On the other hand, A* is a search algorithm that improves upon Dijkstra’s Algorithm by using heuristics to guide its search. It combines the cost to reach the current node (like Dijkstra’s) with an estimate (**heuristic) of the cost to reach the goal. This allows A* to find the shortest path more efficiently in many cases, especially when the heuristic is well-chosen. A* is widely used in pathfinding and graph traversal, such as in video game AI.
+On the other hand, A* is a search algorithm that improves upon Dijkstra’s Algorithm by using heuristics to guide its search. It combines the cost to reach the current node (like Dijkstra’s) with an estimate (*heuristic) of the cost to reach the goal. This allows A* to find the shortest path more efficiently in many cases, especially when the heuristic is well-chosen. A* is widely used in pathfinding and graph traversal, such as in video game AI.
 
