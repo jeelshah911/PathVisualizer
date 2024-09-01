@@ -7,18 +7,22 @@
 
   .node-finish {
     background-color: red;
+    animation: none;
   }
 
   .node-start {
     background-color: green;
+    animation: none;
   }
 
   .node-visited {
     animation-name: visitedAnimation;
-    animation-duration: 2s; /* Adjust the duration as needed */
+    animation-duration: 2s;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 }
+
+
 
 @keyframes visitedAnimation {
     0% {

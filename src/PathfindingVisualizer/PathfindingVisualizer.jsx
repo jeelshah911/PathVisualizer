@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Node from './Node/Node';
-import {dijkstra, getNodesInShortestPathOrder} from '../Algorithms/dijkstra';
-
+import {dijkstra, getNodesInShortestPathOrder as getDijkstraNodesInShortestPathOrder} from '../Algorithms/dijkstra';
+import {AStar} from '../Algorithms/Astar';
 import './PathfindingVisualizer.css';
 
 const START_NODE_ROW = 10;
@@ -38,7 +38,7 @@ export default class PathfindingVisualizer extends Component {
     this.setState({mouseIsPressed: false});
   }
 
-  animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+  animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder, isDijkstra) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -48,8 +48,15 @@ export default class PathfindingVisualizer extends Component {
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-visited';
+        const nodeElement = document.getElementById(`node-${node.row}-${node.col}`);
+        if (nodeElement) {
+          if (node.isStart || node.isFinish) {
+            // Skip start and finish nodes
+            nodeElement.className = `node ${node.isStart ? 'node-start' : 'node-finish'}`;
+          } else {
+            nodeElement.className = isDijkstra ? 'node node-visited' : 'node node-a-star-visited';
+          }
+        }
       }, 10 * i);
     }
   }
@@ -69,8 +76,27 @@ export default class PathfindingVisualizer extends Component {
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    const nodesInShortestPathOrder = getDijkstraNodesInShortestPathOrder(finishNode);
+    this.animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder, true);
+  }
+
+  visualizeAStar() {
+    const {grid} = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = AStar(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(finishNode);
+    this.animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder, false);
+  }
+
+  getNodesInShortestPathOrder(finishNode) {
+    const nodesInShortestPathOrder = [];
+    let currentNode = finishNode;
+    while (currentNode !== null) {
+      nodesInShortestPathOrder.unshift(currentNode);
+      currentNode = currentNode.previousNode;
+    }
+    return nodesInShortestPathOrder;
   }
 
   render() {
@@ -80,6 +106,9 @@ export default class PathfindingVisualizer extends Component {
       <>
         <button onClick={() => this.visualizeDijkstra()}>
           Visualize Dijkstra's Algorithm
+        </button>
+        <button onClick={() => this.visualizeAStar()}>
+          Visualize A* Algorithm
         </button>
         <div className="grid">
           {grid.map((row, rowIdx) => {
@@ -134,6 +163,7 @@ const createNode = (col, row) => {
     isVisited: false,
     isWall: false,
     previousNode: null,
+    distanceToFinishNode: Math.abs(row - FINISH_NODE_ROW) + Math.abs(col - FINISH_NODE_COL), // Heuristic for A*
   };
 };
 
