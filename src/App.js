@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import WelcomePage from './WelcomePage';
+import WelcomePage from './Welcomepage';
 import PathfindingVisualizer from './PathfindingVisualizer/PathfindingVisualizer';
 
 function App() {
