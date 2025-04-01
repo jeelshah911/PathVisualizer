@@ -1,11 +1,17 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import PathfindingVisualizer from './PathfindingVisualizer/PathfindingVisualizer'
+import WelcomePage from './WelcomePage';
+import PathfindingVisualizer from './PathfindingVisualizer/PathfindingVisualizer';
+
 function App() {
   return (
-    <div className="App">
-      <PathfindingVisualizer></PathfindingVisualizer>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="/visualizer" element={<PathfindingVisualizer />} />
+      </Routes>
+    </Router>
   );
 }
 
